@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const jogosController = require('../controllers/jogosController');
+const { listarJogos, adicionarJogo, atualizarJogo, deletarJogo } = require('../controllers/jogosController.js');
 
 // Rota para listar todos os jogos
-router.get('/', jogosController.listarJogos);
+router.get('/jogos', listarJogos);
 
 // Rota para adicionar um novo jogo
-router.post('/', jogosController.adicionarJogo);
+router.post('/jogos', adicionarJogo);
 
 // Rota para atualizar informações de um jogo por ID
-router.put('/:id_jogos', jogosController.atualizarJogo);
+router.put('/:id_jogos', atualizarJogo);
 
 // Rota para deletar um jogo por ID
-router.delete('/:id_jogos', jogosController.deletarJogo);
+router.delete('/:id_jogos', deletarJogo);
 
 module.exports = router;

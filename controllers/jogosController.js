@@ -1,10 +1,4 @@
-const express = require('express');
-const db = require('../model/db');
-const app = express();
-
-
-app.use(express.json());
-
+const db = require('../model/db.js');
 
 const listarJogos = (req,res) => {
     db.query('SELECT * FROM jogos', (err, result) =>{
@@ -14,20 +8,40 @@ const listarJogos = (req,res) => {
 }
 
 const adicionarJogo = (req, res) => {
-    const { titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa } = req.body;
-    db.query('INSERT INTO jogos (titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa) VALUES (?, ?, ?, ?, ?, ?, 7)', [titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa], (err, results) => {
-      if (err) throw err;
+  const {titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa} = req.body;
+
+  db.query(
+    'INSERT INTO jogos (titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa],
+    (err, results) => {
+      if (err) {
+        console.error(err.message);
+        res.status(500).json({ error: 'Erro ao adicionar jogo' });
+        return;
+      }
       res.json(results);
-    });
-}
+    }
+  );
+};
+
+
 
 const atualizarJogo = (req, res) => {
     const { titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa } = req.body;
     const { id_jogos } = req.params;
-    db.query('UPDATE jogos SET titulo = "Hello Kitty Island Adventure" WHERE id_jogos = ?', [id_jogos, titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa], (err, results) => {
-      if (err) throw err;
-      res.json(results);
-    });
+    db.query(
+      'UPDATE jogos SET titulo = ?, descricao = ?, data_lancamento = ?, preco = ?, idioma = ?, armazenamento = ?, classificacao_indicativa = ? WHERE id_jogos = ?',
+      [titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa, id_jogos],
+      (err, results) => {
+        if (err) {
+          console.error(err.message);
+          res.status(500).json({ error: 'Erro ao atualizar jogo' });
+          return;
+        }
+        res.json(results);
+      }
+    );
+    
   }
 
 const deletarJogo = (req, res) => {
