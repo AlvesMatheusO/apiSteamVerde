@@ -9,9 +9,9 @@ router.get('/jogos', listarJogos);
 router.post('/jogos', adicionarJogo);
 
 // Rota para atualizar informações de um jogo por ID
-router.put('/:id_jogos', atualizarJogo);
+router.put('/jogos/:id_jogos', atualizarJogo);
 
 // Rota para deletar um jogo por ID
-router.delete('/:id_jogos', deletarJogo);
+router.delete('/jogos/:id_jogos', deletarJogo);
 
 module.exports = router;

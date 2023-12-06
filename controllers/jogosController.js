@@ -25,24 +25,23 @@ const adicionarJogo = (req, res) => {
 };
 
 
-
 const atualizarJogo = (req, res) => {
-    const { titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa } = req.body;
-    const { id_jogos } = req.params;
-    db.query(
-      'UPDATE jogos SET titulo = ?, descricao = ?, data_lancamento = ?, preco = ?, idioma = ?, armazenamento = ?, classificacao_indicativa = ? WHERE id_jogos = ?',
-      [titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa, id_jogos],
-      (err, results) => {
-        if (err) {
-          console.error(err.message);
-          res.status(500).json({ error: 'Erro ao atualizar jogo' });
-          return;
-        }
-        res.json(results);
-      }
-    );
-    
-  }
+  const { titulo, descricao, data_lancamento, preco, idioma, armazenamento, classificacao_indicativa } = req.body;
+  const { id_jogos } = req.params;
+  
+  // Convertendo a data para o formato esperado pelo MySQL
+  const dataFormatada = new Date(data_lancamento).toISOString().slice(0, 19).replace('T', ' ');
+
+  db.query(
+    'UPDATE jogos SET titulo = ?, descricao = ?, data_lancamento = ?, preco = ?, idioma = ?, armazenamento = ?, classificacao_indicativa = ? WHERE id_jogos = ?',
+    [titulo, descricao, dataFormatada, preco, idioma, armazenamento, classificacao_indicativa, id_jogos],
+    (err, results) => {
+      if (err) throw err;
+      res.json(results);
+    }
+  );
+}
+
 
 const deletarJogo = (req, res) => {
     const { id_jogos } = req.params;
